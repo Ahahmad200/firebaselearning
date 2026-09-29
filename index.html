@@ -10,7 +10,12 @@
 <script type="module">
     import { initializeApp } from
     "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-
+import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+    
     const firebaseConfig = {
         apiKey: "AIzaSyDRlfWyjOe6Yg1lTFlZDQzJcOGor1XgBUY",
         authDomain: "fir-learning-project-25a55.firebaseapp.com",
@@ -22,7 +27,36 @@
 };
 
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const registerForm = document.getElementById("registerForm");
+const message = document.getElementById("message");
+    registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try {
+        const userCredential =
+            await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+        await updateProfile(userCredential.user, {
+            displayName: name
+        });
+
+        message.textContent = "Registration successful!";
+
+        registerForm.reset();
+
+    } catch (error) {
+        message.textContent = error.message;
+    }
+});
     document.getElementById("connection").textContent =
         "Firebase connected successfully!";
 </script>
