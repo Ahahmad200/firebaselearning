@@ -309,6 +309,48 @@ const saveMessage =
     }
 
 });
+        const loadMembers =
+    document.getElementById("loadMembers");
+
+const allMembers =
+    document.getElementById("allMembers");
+
+
+loadMembers.addEventListener("click", async () => {
+
+    try {
+
+        const membersRef =
+            collection(db, "members");
+
+        const membersSnapshot =
+            await getDocs(membersRef);
+
+        allMembers.innerHTML = "";
+
+        membersSnapshot.forEach((memberDoc) => {
+
+            const member =
+                memberDoc.data();
+
+            allMembers.innerHTML += `
+                <div>
+                    <p>Name: ${member.Name}</p>
+                    <p>Email: ${member.Email}</p>
+                    <p>Age: ${member.Age}</p>
+                    <hr>
+                </div>
+            `;
+        });
+
+    } catch (error) {
+
+        allMembers.textContent =
+            "Error: " + error.message;
+
+    }
+
+});
 
 
     // Firebase connection message
