@@ -57,7 +57,43 @@
 <button id="loadMember">Load Member</button>
 
 <div id="memberDetails"></div>
+    
+<h2>Add New Member</h2>
 
+<form id="memberForm">
+
+    <input
+        type="text"
+        id="memberName"
+        placeholder="Member Name"
+        required
+    >
+
+    <br><br>
+
+    <input
+        type="email"
+        id="memberEmail"
+        placeholder="Member Email"
+        required
+    >
+
+    <br><br>
+
+    <input
+        type="number"
+        id="memberAge"
+        placeholder="Member Age"
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">Save Member</button>
+
+</form>
+
+<p id="saveMessage"></p>
 
     <script type="module">
 
