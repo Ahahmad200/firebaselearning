@@ -265,6 +265,43 @@ const saveMessage =
         }
 
     });
+        memberForm.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const name =
+        document.getElementById("memberName").value;
+
+    const email =
+        document.getElementById("memberEmail").value;
+
+    const age =
+        Number(document.getElementById("memberAge").value);
+
+    try {
+
+        const newMemberRef =
+            doc(db, "members", "member002");
+
+        await setDoc(newMemberRef, {
+            Name: name,
+            Email: email,
+            Age: age
+        });
+
+        saveMessage.textContent =
+            "Member saved successfully!";
+
+        memberForm.reset();
+
+    } catch (error) {
+
+        saveMessage.textContent =
+            "Error: " + error.message;
+
+    }
+
+});
 
 
     // Firebase connection message
