@@ -61,107 +61,174 @@
 
     <script type="module">
 
-        import { initializeApp } from
-        "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { initializeApp } from
+    "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
-        import {
-            getAuth,
-            createUserWithEmailAndPassword,
-            updateProfile
-        } from
-        "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+    import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        updateProfile
+    } from
+    "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
-
-        const firebaseConfig = {
-
-            apiKey: "AIzaSyDRlfWyjOe6Yg1lTFlZDQzJcOGor1XgBUY",
-
-            authDomain:
-            "fir-learning-project-25a55.firebaseapp.com",
-
-            projectId:
-            "fir-learning-project-25a55",
-
-            storageBucket:
-            "fir-learning-project-25a55.firebasestorage.app",
-
-            messagingSenderId:
-            "28462227355",
-
-            appId:
-            "1:28462227355:web:c78a76ccc65f8fd9f1cb3e",
-
-            measurementId:
-            "G-BK28KXWZ14"
-        };
+    import {
+        getFirestore,
+        doc,
+        getDoc
+    } from
+    "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
 
 
-        const app = initializeApp(firebaseConfig);
+    const firebaseConfig = {
 
-        const auth = getAuth(app);
+        apiKey: "AIzaSyDRlfWyjO6Yg1lTFlZDQzJcOGor1XgBUY",
 
+        authDomain:
+        "fir-learning-project-25a55.firebaseapp.com",
 
-        const registerForm =
-            document.getElementById("registerForm");
+        projectId:
+        "fir-learning-project-25a55",
 
-        const message =
-            document.getElementById("message");
+        storageBucket:
+        "fir-learning-project-25a55.firebasestorage.app",
 
+        messagingSenderId:
+        "28462227355",
 
-        registerForm.addEventListener("submit", async (e) => {
+        appId:
+        "1:28462227355:web:c78a76ccc65f8fd9f1cb3e",
 
-            e.preventDefault();
-
-
-            const name =
-                document.getElementById("name").value;
-
-            const email =
-                document.getElementById("email").value;
-
-            const password =
-                document.getElementById("password").value;
+        measurementId:
+        "G-BK28KXWZ14"
+    };
 
 
-            try {
+    // Connect Firebase
 
-                const userCredential =
-                    await createUserWithEmailAndPassword(
-                        auth,
-                        email,
-                        password
-                    );
+    const app = initializeApp(firebaseConfig);
 
 
-                await updateProfile(
-                    userCredential.user,
-                    {
-                        displayName: name
-                    }
+    // Connect Authentication
+
+    const auth = getAuth(app);
+
+
+    // Connect Firestore Database
+
+    const db = getFirestore(app);
+
+
+    // Registration form
+
+    const registerForm =
+        document.getElementById("registerForm");
+
+    const message =
+        document.getElementById("message");
+
+
+    registerForm.addEventListener("submit", async (e) => {
+
+        e.preventDefault();
+
+
+        const name =
+            document.getElementById("name").value;
+
+        const email =
+            document.getElementById("email").value;
+
+        const password =
+            document.getElementById("password").value;
+
+
+        try {
+
+            const userCredential =
+                await createUserWithEmailAndPassword(
+                    auth,
+                    email,
+                    password
                 );
 
 
-                message.textContent =
-                    "Registration successful!";
+            await updateProfile(
+                userCredential.user,
+                {
+                    displayName: name
+                }
+            );
 
-                registerForm.reset();
+
+            message.textContent =
+                "Registration successful!";
+
+            registerForm.reset();
 
 
-            } catch (error) {
+        } catch (error) {
 
-                message.textContent =
-                    error.message;
+            message.textContent =
+                error.message;
+
+        }
+
+    });
+
+
+    // Load member from Firestore
+
+    const loadMember =
+        document.getElementById("loadMember");
+
+    const memberDetails =
+        document.getElementById("memberDetails");
+
+
+    loadMember.addEventListener("click", async () => {
+
+        try {
+
+            const memberRef =
+                doc(db, "members", "member001");
+
+
+            const memberSnap =
+                await getDoc(memberRef);
+
+
+            if (memberSnap.exists()) {
+
+                const member =
+                    memberSnap.data();
+
+
+                memberDetails.innerHTML = `
+                    <p>Name: ${member.name}</p>
+                    <p>Email: ${member.email}</p>
+                    <p>Age: ${member.age}</p>
+                `;
+
+            } else {
+
+                memberDetails.textContent =
+                    "Member not found.";
 
             }
 
-        });
+        } catch (error) {
+
+            memberDetails.textContent =
+                "Error: " + error.message;
+
+        }
+
+    });
 
 
-        document.getElementById("connection").textContent =
-            "Firebase connected successfully!";
+    // Firebase connection message
+
+    document.getElementById("connection").textContent =
+        "Firebase connected successfully!";
 
     </script>
-
-</body>
-
-</html>
